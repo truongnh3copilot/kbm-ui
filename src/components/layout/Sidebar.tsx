@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { BookOpen, ShieldCheck, ChevronDown, Store, ScrollText } from 'lucide-react'
+import { BookOpen, ShieldCheck, ChevronDown, Store, ScrollText, Users, MessageSquare } from 'lucide-react'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import clsx from 'clsx'
@@ -15,6 +15,8 @@ const navGroups = [
     children: [
       { href: '/knowledge',       label: 'Store',          icon: Store },
       { href: '/access-control',  label: 'Access Request', icon: ShieldCheck },
+      { href: '/users-groups',    label: 'Users & Groups', icon: Users },
+      { href: '/feedback',        label: 'Feedback',       icon: MessageSquare },
       { href: '/audit-log',       label: 'Audit Log',      icon: ScrollText },
     ],
   },

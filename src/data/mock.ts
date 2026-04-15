@@ -44,6 +44,17 @@ export interface AccessRequest {
   reviewedBy?: string
 }
 
+export interface Feedback {
+  id: string
+  fromUser: string      // sender
+  toUser: string        // KB owner / recipient
+  categoryId: string
+  subject: string
+  message: string
+  sentAt: string
+  status: 'unread' | 'read' | 'resolved'
+}
+
 export interface AuditLog {
   id: string
   timestamp: string
@@ -52,6 +63,14 @@ export interface AuditLog {
   action: 'create' | 'update' | 'delete' | 'upload' | 'approve' | 'reject' | 'access'
   target: string
   detail: string
+}
+
+export interface User {
+  id: string
+  name: string
+  email: string
+  role: string
+  groupIds: string[]   // a user can belong to multiple groups
 }
 
 export interface ChatMessage {
@@ -102,6 +121,20 @@ export const userGroups: UserGroup[] = [
   { id: 'g3', name: 'Sales', memberCount: 9, description: 'Account executives and SDRs.' },
   { id: 'g4', name: 'HR', memberCount: 4, description: 'Human resources team.' },
   { id: 'g5', name: 'Legal', memberCount: 3, description: 'Legal and compliance team.' },
+]
+
+// --- Users ---
+export const users: User[] = [
+  { id: 'u1',  name: 'Nguyễn Thị Lan',   email: 'lan.nguyen@company.vn',   role: 'Admin',              groupIds: ['g1', 'g2'] },
+  { id: 'u2',  name: 'Trần Văn Hùng',    email: 'hung.tran@company.vn',    role: 'Engineer',           groupIds: ['g1'] },
+  { id: 'u3',  name: 'Lê Thị Mai',       email: 'mai.le@company.vn',       role: 'Engineer',           groupIds: ['g1', 'g2'] },
+  { id: 'u4',  name: 'Phạm Văn Đức',     email: 'duc.pham@company.vn',     role: 'Legal Counsel',      groupIds: ['g5'] },
+  { id: 'u5',  name: 'Hoàng Thị Thu',    email: 'thu.hoang@company.vn',    role: 'Sales Manager',      groupIds: ['g2', 'g3'] },
+  { id: 'u6',  name: 'Phòng Nhân Sự',    email: 'hr@company.vn',           role: 'HR Manager',         groupIds: ['g4'] },
+  { id: 'u7',  name: 'Nguyễn Văn Minh',  email: 'minh.nguyen@company.vn',  role: 'Product Manager',    groupIds: ['g2'] },
+  { id: 'u8',  name: 'Trần Thị Hoa',     email: 'hoa.tran@company.vn',     role: 'Sales Rep',          groupIds: ['g3'] },
+  { id: 'u9',  name: 'Lê Văn Khoa',      email: 'khoa.le@company.vn',      role: 'Engineer',           groupIds: ['g1', 'g2', 'g3'] },
+  { id: 'u10', name: 'Vũ Thị Linh',      email: 'linh.vu@company.vn',      role: 'Compliance Officer', groupIds: ['g4', 'g5'] },
 ]
 
 // --- Current logged-in user ---
@@ -234,6 +267,22 @@ export const auditLogs: AuditLog[] = [
   { id: 'al10', timestamp: '2026-04-14 15:20:14', user: 'Nguyễn Thị Lan', module: 'KB Store',       action: 'update',  target: 'Product Documentation',         detail: 'Changed name and color tag' },
   { id: 'al11', timestamp: '2026-04-14 14:08:52', user: 'Phạm Văn Đức',     module: 'Access Request', action: 'approve', target: 'Trần Văn Hùng → Sales Playbook',    detail: 'Approved View Only access' },
   { id: 'al12', timestamp: '2026-04-13 10:33:41', user: 'Hoàng Thị Thu',    module: 'KB Store',       action: 'delete',  target: 'Archived Docs 2023',            detail: 'Deleted KB category' },
+]
+
+// --- Feedback ---
+export const feedbacks: Feedback[] = [
+  { id: 'fb1',  fromUser: 'Trần Văn Hùng',   toUser: 'Nguyễn Thị Lan',  categoryId: 'c1', subject: 'Tài liệu phiên bản 2.4 thiếu phần hướng dẫn cài đặt', message: 'Chào chị Lan,\n\nEm đọc tài liệu Product v2.4 nhưng không thấy phần hướng dẫn cài đặt cho môi trường Linux. Chị có thể bổ sung thêm không ạ? Em cần tham khảo để triển khai cho khách hàng.', sentAt: '2026-04-16 10:15:00', status: 'unread' },
+  { id: 'fb2',  fromUser: 'Lê Thị Mai',       toUser: 'Nguyễn Thị Lan',  categoryId: 'c1', subject: 'Cần cập nhật API Reference cho endpoint mới', message: 'Hi Lan,\n\nAPI Reference hiện tại chưa có tài liệu cho các endpoint /v2/webhooks vừa ra mắt tuần trước. Team backend đã deploy rồi nhưng chưa có docs. Bạn có thể nhờ ai update không?', sentAt: '2026-04-15 16:40:22', status: 'unread' },
+  { id: 'fb3',  fromUser: 'Nguyễn Văn Minh',  toUser: 'Lê Thị Mai',      categoryId: 'c3', subject: 'Runbook triển khai cần bổ sung bước rollback', message: 'Chào Mai,\n\nMình đọc Deployment Runbook thấy thiếu phần hướng dẫn rollback khi deploy thất bại. Lần trước incident xảy ra mà không có quy trình rõ ràng nên mất khá nhiều thời gian xử lý. Mong bạn bổ sung thêm nhé.', sentAt: '2026-04-15 14:20:05', status: 'read' },
+  { id: 'fb4',  fromUser: 'Hoàng Thị Thu',    toUser: 'Lê Thị Mai',      categoryId: 'c3', subject: 'Tài liệu Architecture Overview rất hữu ích!', message: 'Chào Mai,\n\nMình vừa đọc xong tài liệu Architecture Overview và thấy rất chi tiết, dễ hiểu. Cảm ơn bạn đã dành thời gian viết tài liệu này. Phần diagram hệ thống đặc biệt rõ ràng và giúp mình hiểu nhanh luồng xử lý. 👍', sentAt: '2026-04-14 11:30:45', status: 'resolved' },
+  { id: 'fb5',  fromUser: 'Phạm Văn Đức',     toUser: 'Phòng Nhân Sự',   categoryId: 'c2', subject: 'Chính sách làm việc từ xa cần được cập nhật', message: 'Kính gửi Phòng Nhân Sự,\n\nChính sách làm việc từ xa trong Employee Handbook 2026 chưa đề cập đến quy định về bảo mật thông tin khi làm việc ngoài văn phòng. Đề nghị bổ sung phần này để nhân viên nắm rõ trách nhiệm.', sentAt: '2026-04-14 09:05:18', status: 'read' },
+  { id: 'fb6',  fromUser: 'Trần Thị Hoa',     toUser: 'Hoàng Thị Thu',   categoryId: 'c4', subject: 'Script bán hàng Q2 cần thêm kịch bản xử lý từ chối', message: 'Chị Thu ơi,\n\nEm dùng Sales Script Q2 nhưng thấy chưa có phần xử lý khi khách hàng từ chối vì giá. Chị có thể bổ sung thêm một số mẫu câu phản hồi không ạ? Em nghĩ sẽ rất hữu ích cho cả team.', sentAt: '2026-04-13 15:55:30', status: 'unread' },
+  { id: 'fb7',  fromUser: 'Lê Văn Khoa',      toUser: 'Nguyễn Thị Lan',  categoryId: 'c1', subject: 'Integration Checklist thiếu bước kiểm tra SSL', message: 'Chào chị,\n\nEm vừa hoàn thành integration cho client ABC và phát hiện trong Checklist chưa có bước verify SSL certificate. Đây là bước quan trọng nên em đề xuất bổ sung vào tài liệu ạ.', sentAt: '2026-04-13 10:22:14', status: 'resolved' },
+  { id: 'fb8',  fromUser: 'Vũ Thị Linh',      toUser: 'Phạm Văn Đức',    categoryId: 'c5', subject: 'Compliance checklist 2026 đã được cập nhật chưa?', message: 'Anh Đức ơi,\n\nEm cần xác nhận Compliance Checklist đã được cập nhật theo quy định mới của Nghị định 13/2023 chưa ạ? Tháng sau có đợt kiểm tra nội bộ nên cần tài liệu chính xác.', sentAt: '2026-04-12 14:10:00', status: 'read' },
+  { id: 'fb9',  fromUser: 'Nguyễn Thị Lan',   toUser: 'Hoàng Thị Thu',   categoryId: 'c6', subject: 'Brand guideline cần bổ sung màu sắc cho digital ads', message: 'Thu ơi,\n\nMình đang làm campaign Q2 nhưng Brand Guideline chưa có phần màu sắc và font chữ cho digital ads (banner, social media). Bạn có thể cập nhật phần này không? Deadline tuần tới rồi.', sentAt: '2026-04-12 09:48:33', status: 'resolved' },
+  { id: 'fb10', fromUser: 'Phòng Nhân Sự',    toUser: 'Nguyễn Thị Lan',  categoryId: 'c2', subject: 'Onboarding checklist cần link tới tài khoản hệ thống', message: 'Chào chị Lan,\n\nOnboarding Checklist hiện tại chưa có link hoặc hướng dẫn tạo tài khoản cho các hệ thống nội bộ (Jira, Confluence, Slack). Nhân viên mới hay hỏi mà không biết chỉ đường. Chị có thể bổ sung giúp không ạ?', sentAt: '2026-04-11 13:25:47', status: 'unread' },
+  { id: 'fb11', fromUser: 'Trần Văn Hùng',    toUser: 'Lê Thị Mai',      categoryId: 'c3', subject: 'ADR cho microservices cần thêm section về observability', message: 'Chào Mai,\n\nMình đọc Architecture Decision Record thấy chưa có phần về observability strategy (logging, metrics, tracing). Đây là phần quan trọng khi team muốn mở rộng hệ thống. Bạn có kế hoạch bổ sung không?', sentAt: '2026-04-10 16:00:00', status: 'resolved' },
+  { id: 'fb12', fromUser: 'Lê Văn Khoa',      toUser: 'Hoàng Thị Thu',   categoryId: 'c4', subject: 'Case study khách hàng XYZ rất ấn tượng', message: 'Chào chị Thu,\n\nEm vừa đọc case study về khách hàng XYZ trong Sales Playbook và thấy rất ấn tượng. Cách trình bày số liệu ROI rất thuyết phục. Em sẽ dùng làm tham khảo cho pitch deck tuần tới. Cảm ơn chị!', sentAt: '2026-04-09 08:30:22', status: 'read' },
 ]
 
 // --- Chat messages per category ---
