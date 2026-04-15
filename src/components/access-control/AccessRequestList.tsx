@@ -16,7 +16,7 @@ const levelConfig = {
   edit: { label: 'Edit',      style: 'bg-purple-100 text-purple-700' },
 }
 
-const CURRENT_USER = 'Alice Johnson'
+const CURRENT_USER = 'Nguyễn Thị Lan'
 
 function ActionMenu({ onApprove, onReject }: { onApprove: () => void; onReject: () => void }) {
   const [open, setOpen] = useState(false)

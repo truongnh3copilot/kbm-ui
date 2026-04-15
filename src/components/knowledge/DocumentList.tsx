@@ -70,7 +70,7 @@ export default function DocumentList({ categoryId }: Props) {
         type: docType,
         size: sizeStr,
         uploadDate: new Date().toISOString().slice(0, 10),
-        uploadedBy: 'Alice Johnson',
+        uploadedBy: 'Nguyễn Thị Lan',
       })
     }
 

@@ -64,7 +64,7 @@ export default function Header({ title, searchAutoFocus, search, onSearchChange 
             <div className="w-7 h-7 rounded-full bg-blue-500 flex items-center justify-center text-white text-xs font-semibold">
               A
             </div>
-            <span className="text-sm font-medium text-gray-700 hidden md:block">Alice Johnson</span>
+            <span className="text-sm font-medium text-gray-700 hidden md:block">Nguyễn Thị Lan</span>
             <ChevronDown size={14} className="text-gray-400" />
           </button>
 

@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { BookOpen, ShieldCheck, ChevronDown, Store } from 'lucide-react'
+import { BookOpen, ShieldCheck, ChevronDown, Store, ScrollText } from 'lucide-react'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import clsx from 'clsx'
@@ -15,6 +15,7 @@ const navGroups = [
     children: [
       { href: '/knowledge',       label: 'Store',          icon: Store },
       { href: '/access-control',  label: 'Access Request', icon: ShieldCheck },
+      { href: '/audit-log',       label: 'Audit Log',      icon: ScrollText },
     ],
   },
 ]
@@ -96,7 +97,7 @@ export default function Sidebar() {
             A
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-white truncate">Alice Johnson</p>
+            <p className="text-sm font-medium text-white truncate">Nguyễn Thị Lan</p>
             <p className="text-xs text-gray-400 truncate">Admin</p>
           </div>
         </div>
