@@ -31,10 +31,6 @@ export default function CategoryGrid({ search = '' }: CategoryGridProps) {
     setShowModal(true)
   }
 
-  function handleDelete(id: string) {
-    setCategories(prev => prev.filter(c => c.id !== id))
-  }
-
   function handleSubmit() {
     if (!form.name.trim()) return
     if (editing) {
@@ -76,7 +72,6 @@ export default function CategoryGrid({ search = '' }: CategoryGridProps) {
             key={cat.id}
             category={cat}
             onEdit={openEdit}
-            onDelete={handleDelete}
           />
         ))}
       </div>

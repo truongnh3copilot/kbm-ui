@@ -1,8 +1,8 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import { Plus, MoreVertical, CheckCircle, XCircle, X, MessageSquare } from 'lucide-react'
-import { AccessRequest, accessRequests as initialRequests, categories, userGroups } from '@/data/mock'
+import { Plus, MoreVertical, CheckCircle, XCircle, X, MessageSquare, User, Bell } from 'lucide-react'
+import { AccessRequest, accessRequests as initialRequests, categories, userGroups, currentUser } from '@/data/mock'
 import clsx from 'clsx'
 
 const statusConfig = {
@@ -16,7 +16,7 @@ const levelConfig = {
   edit: { label: 'Edit',      style: 'bg-purple-100 text-purple-700' },
 }
 
-const CURRENT_USER = 'Nguyễn Thị Lan'
+const CURRENT_USER = currentUser.name
 
 function ActionMenu({ onApprove, onReject }: { onApprove: () => void; onReject: () => void }) {
   const [open, setOpen] = useState(false)
@@ -59,8 +59,19 @@ function ActionMenu({ onApprove, onReject }: { onApprove: () => void; onReject: 
   )
 }
 
+function isVisible(r: AccessRequest) {
+  // own requests
+  if (r.requester === currentUser.name) return true
+  // requests for groups the current user manages/belongs to
+  if (currentUser.groupIds.includes(r.groupId)) return true
+  return false
+}
+
+type Tab = 'mine' | 'approval'
+
 export default function AccessRequestList() {
-  const [requests, setRequests] = useState<AccessRequest[]>(initialRequests)
+  const [requests, setRequests] = useState<AccessRequest[]>(initialRequests.filter(isVisible))
+  const [tab, setTab] = useState<Tab>('mine')
   const [statusFilter, setStatusFilter] = useState<'all' | 'pending' | 'approved' | 'rejected'>('all')
   const [showAddModal, setShowAddModal] = useState(false)
   const [form, setForm] = useState({ groupId: '', categoryId: '', levels: [] as ('view' | 'edit')[] })
@@ -68,7 +79,12 @@ export default function AccessRequestList() {
   // Confirm modal state
   const [confirm, setConfirm] = useState<{ id: string; action: 'approved' | 'rejected'; comment: string } | null>(null)
 
-  const visibleRequests = statusFilter === 'all' ? requests : requests.filter(r => r.status === statusFilter)
+  const myRequests      = requests.filter(r => r.requester === CURRENT_USER)
+  const approvalRequests = requests.filter(r => r.requester !== CURRENT_USER && currentUser.groupIds.includes(r.groupId))
+  const pendingApprovalCount = approvalRequests.filter(r => r.status === 'pending').length
+
+  const baseList = tab === 'mine' ? myRequests : approvalRequests
+  const visibleRequests = statusFilter === 'all' ? baseList : baseList.filter(r => r.status === statusFilter)
 
   function openConfirm(id: string, action: 'approved' | 'rejected') {
     setConfirm({ id, action, comment: '' })
@@ -109,26 +125,43 @@ export default function AccessRequestList() {
 
   return (
     <div>
-      {/* Toolbar */}
-      <div className="flex items-center justify-between mb-5 gap-4 flex-wrap">
-        <div className="flex items-center gap-2">
-          {(['all', 'pending', 'approved', 'rejected'] as const).map(s => (
-            <button
-              key={s}
-              onClick={() => setStatusFilter(s)}
-              className={clsx(
-                'px-3 py-1.5 text-xs font-medium rounded-full border transition-colors capitalize',
-                statusFilter === s
-                  ? s === 'all'      ? 'bg-gray-800 text-white border-gray-800'
-                  : s === 'pending'  ? 'bg-yellow-500 text-white border-yellow-500'
-                  : s === 'approved' ? 'bg-green-600 text-white border-green-600'
-                                     : 'bg-red-500 text-white border-red-500'
-                  : 'bg-white text-gray-500 border-gray-200 hover:border-gray-400'
-              )}
-            >
-              {s === 'all' ? `All (${requests.length})` : `${s.charAt(0).toUpperCase() + s.slice(1)} (${requests.filter(r => r.status === s).length})`}
-            </button>
-          ))}
+      {/* Tabs + Add button */}
+      <div className="flex items-center justify-between mb-4 gap-4 flex-wrap">
+        <div className="flex border border-gray-200 rounded-lg overflow-hidden">
+          <button
+            onClick={() => { setTab('mine'); setStatusFilter('all') }}
+            className={clsx(
+              'flex items-center gap-2 px-4 py-2 text-sm font-medium transition-colors',
+              tab === 'mine' ? 'bg-blue-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-50'
+            )}
+          >
+            <User size={14} />
+            My Requests
+            <span className={clsx(
+              'px-1.5 py-0.5 rounded-full text-xs font-semibold',
+              tab === 'mine' ? 'bg-white text-blue-600' : 'bg-gray-100 text-gray-600'
+            )}>
+              {myRequests.length}
+            </span>
+          </button>
+          <button
+            onClick={() => { setTab('approval'); setStatusFilter('all') }}
+            className={clsx(
+              'flex items-center gap-2 px-4 py-2 text-sm font-medium transition-colors border-l border-gray-200',
+              tab === 'approval' ? 'bg-blue-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-50'
+            )}
+          >
+            <Bell size={14} />
+            Needs My Approval
+            {pendingApprovalCount > 0 && (
+              <span className={clsx(
+                'px-1.5 py-0.5 rounded-full text-xs font-semibold',
+                tab === 'approval' ? 'bg-white text-blue-600' : 'bg-red-500 text-white'
+              )}>
+                {pendingApprovalCount}
+              </span>
+            )}
+          </button>
         </div>
         <button
           onClick={() => setShowAddModal(true)}
@@ -138,17 +171,42 @@ export default function AccessRequestList() {
         </button>
       </div>
 
+      {/* Status filter pills */}
+      <div className="flex items-center gap-2 mb-4 flex-wrap">
+        {(['all', 'pending', 'approved', 'rejected'] as const).map(s => (
+          <button
+            key={s}
+            onClick={() => setStatusFilter(s)}
+            className={clsx(
+              'px-3 py-1.5 text-xs font-medium rounded-full border transition-colors',
+              statusFilter === s
+                ? s === 'all'      ? 'bg-gray-800 text-white border-gray-800'
+                : s === 'pending'  ? 'bg-yellow-500 text-white border-yellow-500'
+                : s === 'approved' ? 'bg-green-600 text-white border-green-600'
+                                   : 'bg-red-500 text-white border-red-500'
+                : 'bg-white text-gray-500 border-gray-200 hover:border-gray-400'
+            )}
+          >
+            {s === 'all'
+              ? `All (${baseList.length})`
+              : `${s.charAt(0).toUpperCase() + s.slice(1)} (${baseList.filter(r => r.status === s).length})`
+            }
+          </button>
+        ))}
+      </div>
+
       {/* Table */}
       <div className="overflow-auto rounded-xl border border-gray-200">
         <table className="w-full text-sm">
           <thead className="bg-gray-50 border-b border-gray-200 sticky top-0">
             <tr>
-              <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Requester</th>
+              {tab === 'approval' && <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Requester</th>}
               <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Group</th>
               <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Category</th>
               <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Access Level</th>
               <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Status</th>
               <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide hidden sm:table-cell">Date</th>
+              <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide hidden md:table-cell">Approver</th>
               <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide hidden md:table-cell">Comment</th>
               <th className="px-4 py-3" />
             </tr>
@@ -159,7 +217,7 @@ export default function AccessRequestList() {
               const category = categories.find(c => c.id === r.categoryId)
               return (
                 <tr key={r.id} className="hover:bg-gray-50 transition-colors">
-                  <td className="px-4 py-3 font-medium text-gray-800">{r.requester}</td>
+                  {tab === 'approval' && <td className="px-4 py-3 font-medium text-gray-800">{r.requester}</td>}
                   <td className="px-4 py-3 text-gray-600">{group?.name ?? r.groupId}</td>
                   <td className="px-4 py-3 text-gray-600">{category?.name ?? r.categoryId}</td>
                   <td className="px-4 py-3">
@@ -177,6 +235,9 @@ export default function AccessRequestList() {
                     </span>
                   </td>
                   <td className="px-4 py-3 text-gray-400 hidden sm:table-cell">{r.requestedAt}</td>
+                  <td className="px-4 py-3 hidden md:table-cell text-gray-600 text-sm">
+                    {r.reviewedBy ?? <span className="text-gray-300">—</span>}
+                  </td>
                   <td className="px-4 py-3 hidden md:table-cell">
                     {r.comment ? (
                       <div className="flex items-start gap-1.5 max-w-[200px]">
@@ -188,7 +249,7 @@ export default function AccessRequestList() {
                     )}
                   </td>
                   <td className="px-4 py-3">
-                    {r.status === 'pending' && (
+                    {tab === 'approval' && r.status === 'pending' && (
                       <ActionMenu
                         onApprove={() => openConfirm(r.id, 'approved')}
                         onReject={() => openConfirm(r.id, 'rejected')}

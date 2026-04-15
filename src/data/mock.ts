@@ -104,6 +104,13 @@ export const userGroups: UserGroup[] = [
   { id: 'g5', name: 'Legal', memberCount: 3, description: 'Legal and compliance team.' },
 ]
 
+// --- Current logged-in user ---
+export const currentUser = {
+  name: 'Nguyễn Thị Lan',
+  role: 'Admin',
+  groupIds: ['g1', 'g2'], // groups this user belongs to
+}
+
 // --- Permissions ---
 export const permissions: Permission[] = [
   { groupId: 'g1', categoryId: 'c1', level: 'edit' },
@@ -192,13 +199,25 @@ export const uploadTrend = [
 ]
 
 // --- Access Requests ---
+// My Requests (requester = Nguyễn Thị Lan): covers pending / approved / rejected / multi-level
+// Needs My Approval (groupId in g1|g2, requester != Nguyễn Thị Lan): covers pending / approved / rejected / with comments
 export const accessRequests: AccessRequest[] = [
-  { id: 'r1', requester: 'Trần Văn Hùng',    groupId: 'g3', categoryId: 'c3', levels: ['view'],         status: 'pending',  requestedAt: '2026-04-14' },
-  { id: 'r2', requester: 'Lê Thị Mai',    groupId: 'g4', categoryId: 'c1', levels: ['view', 'edit'], status: 'pending',  requestedAt: '2026-04-13' },
-  { id: 'r3', requester: 'Phạm Văn Đức',    groupId: 'g5', categoryId: 'c4', levels: ['view'],         status: 'approved', requestedAt: '2026-04-11' },
-  { id: 'r4', requester: 'Hoàng Thị Thu',   groupId: 'g1', categoryId: 'c5', levels: ['edit'],         status: 'rejected', requestedAt: '2026-04-10' },
-  { id: 'r5', requester: 'Nguyễn Thị Lan',groupId: 'g2', categoryId: 'c6', levels: ['view', 'edit'], status: 'pending',  requestedAt: '2026-04-09' },
-  { id: 'r6', requester: 'Trần Văn Hùng',    groupId: 'g5', categoryId: 'c2', levels: ['edit'],         status: 'approved', requestedAt: '2026-04-08' },
+  // ── My Requests ──────────────────────────────────────────────────────────
+  { id: 'r1',  requester: 'Nguyễn Thị Lan', groupId: 'g3', categoryId: 'c4', levels: ['view'],         status: 'pending',  requestedAt: '2026-04-16' },
+  { id: 'r2',  requester: 'Nguyễn Thị Lan', groupId: 'g4', categoryId: 'c2', levels: ['view', 'edit'], status: 'pending',  requestedAt: '2026-04-15' },
+  { id: 'r3',  requester: 'Nguyễn Thị Lan', groupId: 'g5', categoryId: 'c5', levels: ['view'],         status: 'approved', requestedAt: '2026-04-13', comment: 'Duyệt cho truy cập tài liệu pháp lý.', reviewedBy: 'Phạm Văn Đức' },
+  { id: 'r4',  requester: 'Nguyễn Thị Lan', groupId: 'g3', categoryId: 'c6', levels: ['edit'],         status: 'approved', requestedAt: '2026-04-11', comment: 'OK, có thể chỉnh sửa.', reviewedBy: 'Hoàng Thị Thu' },
+  { id: 'r5',  requester: 'Nguyễn Thị Lan', groupId: 'g4', categoryId: 'c1', levels: ['view', 'edit'], status: 'rejected', requestedAt: '2026-04-10', comment: 'Chưa đủ thẩm quyền để chỉnh sửa.', reviewedBy: 'Lê Thị Mai' },
+  { id: 'r6',  requester: 'Nguyễn Thị Lan', groupId: 'g5', categoryId: 'c3', levels: ['view'],         status: 'rejected', requestedAt: '2026-04-08', comment: 'Nội dung nội bộ, không chia sẻ.', reviewedBy: 'Phạm Văn Đức' },
+
+  // ── Needs My Approval (groupId = g1 or g2) ───────────────────────────────
+  { id: 'r7',  requester: 'Trần Văn Hùng',  groupId: 'g1', categoryId: 'c3', levels: ['view'],         status: 'pending',  requestedAt: '2026-04-16' },
+  { id: 'r8',  requester: 'Lê Thị Mai',     groupId: 'g2', categoryId: 'c1', levels: ['view', 'edit'], status: 'pending',  requestedAt: '2026-04-15' },
+  { id: 'r9',  requester: 'Phạm Văn Đức',   groupId: 'g1', categoryId: 'c6', levels: ['edit'],         status: 'pending',  requestedAt: '2026-04-14' },
+  { id: 'r10', requester: 'Hoàng Thị Thu',  groupId: 'g2', categoryId: 'c4', levels: ['view'],         status: 'approved', requestedAt: '2026-04-13', comment: 'Cho phép xem tài liệu bán hàng.', reviewedBy: 'Nguyễn Thị Lan' },
+  { id: 'r11', requester: 'Trần Văn Hùng',  groupId: 'g1', categoryId: 'c1', levels: ['view', 'edit'], status: 'approved', requestedAt: '2026-04-11', comment: 'Đã xác nhận với trưởng nhóm.', reviewedBy: 'Nguyễn Thị Lan' },
+  { id: 'r12', requester: 'Lê Thị Mai',     groupId: 'g2', categoryId: 'c6', levels: ['edit'],         status: 'rejected', requestedAt: '2026-04-10', comment: 'Chưa hoàn thành đào tạo bắt buộc.', reviewedBy: 'Nguyễn Thị Lan' },
+  { id: 'r13', requester: 'Phạm Văn Đức',   groupId: 'g1', categoryId: 'c3', levels: ['view'],         status: 'rejected', requestedAt: '2026-04-09', comment: 'Không thuộc phạm vi công việc.', reviewedBy: 'Nguyễn Thị Lan' },
 ]
 
 // --- Audit Logs ---
