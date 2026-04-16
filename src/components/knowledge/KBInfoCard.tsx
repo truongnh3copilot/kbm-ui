@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { User, Users, FileStack, Clock, X, CheckCircle, Code2, Copy, RefreshCw, ToggleLeft, ToggleRight, ChevronDown, ChevronUp } from 'lucide-react'
+import { User, Users, FileStack, Clock, X, CheckCircle, Code2, Copy, RefreshCw, ToggleLeft, ToggleRight, ChevronDown, ChevronUp, Plug } from 'lucide-react'
 import { Category, UserGroup } from '@/data/mock'
 
 interface Props {
@@ -20,6 +20,10 @@ export default function KBInfoCard({ category, groups }: Props) {
   const [apiEnabled, setApiEnabled] = useState(false)
   const [apiKey, setApiKey] = useState(() => generateKey())
   const [copied, setCopied] = useState<string | null>(null)
+  // MCP modal state
+  const [showMcp, setShowMcp] = useState(false)
+  const [mcpEnabled, setMcpEnabled] = useState(false)
+  const [mcpToken, setMcpToken] = useState(() => generateKey())
 
   function copyToClipboard(text: string, key: string) {
     navigator.clipboard.writeText(text)
@@ -42,6 +46,13 @@ export default function KBInfoCard({ category, groups }: Props) {
             <span className="text-base font-semibold text-purple-600">{category.name}</span>
           </div>
           <div className="flex items-center gap-3" onClick={e => e.stopPropagation()}>
+            <button
+              onClick={() => setShowMcp(true)}
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-violet-600 border border-violet-200 bg-violet-50 rounded-lg hover:bg-violet-100 transition-colors"
+            >
+              <Plug size={13} />
+              Expose MCP
+            </button>
             <button
               onClick={() => setShowApi(true)}
               className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-blue-600 border border-blue-200 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors"
@@ -98,6 +109,121 @@ export default function KBInfoCard({ category, groups }: Props) {
           </div>
         </div>
       </div>
+
+      {/* MCP Modal */}
+      {showMcp && (() => {
+        const mcpServerUrl = `https://mcp.kbm.io/v1/kb/${category.id}`
+        const configSnippet = `{
+  "mcpServers": {
+    "${category.name}": {
+      "url": "${mcpServerUrl}",
+      "headers": {
+        "Authorization": "Bearer ${mcpToken}"
+      }
+    }
+  }
+}`
+        return (
+          <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-xl shadow-xl w-full max-w-lg">
+              <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
+                <div className="flex items-center gap-2">
+                  <Plug size={16} className="text-violet-600" />
+                  <h2 className="font-semibold text-gray-800">MCP Access</h2>
+                </div>
+                <button onClick={() => setShowMcp(false)} className="text-gray-400 hover:text-gray-600"><X size={18} /></button>
+              </div>
+
+              <div className="px-5 py-4 space-y-5">
+                {/* Enable toggle */}
+                <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                  <div>
+                    <p className="text-sm font-medium text-gray-700">MCP Access</p>
+                    <p className="text-xs text-gray-400 mt-0.5">{mcpEnabled ? 'This KB is accessible as an MCP server' : 'Enable to expose this KB as an MCP server'}</p>
+                  </div>
+                  <button onClick={() => setMcpEnabled(v => !v)} className="flex-shrink-0">
+                    {mcpEnabled
+                      ? <ToggleRight size={28} className="text-violet-600" />
+                      : <ToggleLeft size={28} className="text-gray-300" />
+                    }
+                  </button>
+                </div>
+
+                {/* Server URL */}
+                <div>
+                  <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">Server URL</label>
+                  <div className="flex items-center gap-2">
+                    <code className="flex-1 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-xs text-gray-700 font-mono truncate">
+                      {mcpServerUrl}
+                    </code>
+                    <button
+                      onClick={() => copyToClipboard(mcpServerUrl, 'mcp-url')}
+                      className="p-2 text-gray-400 hover:text-violet-600 hover:bg-violet-50 rounded-lg transition-colors flex-shrink-0"
+                      title="Copy"
+                    >
+                      {copied === 'mcp-url' ? <CheckCircle size={15} className="text-green-500" /> : <Copy size={15} />}
+                    </button>
+                  </div>
+                </div>
+
+                {/* Auth Token */}
+                <div>
+                  <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">Auth Token</label>
+                  <div className="flex items-center gap-2">
+                    <code className="flex-1 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-xs text-gray-700 font-mono truncate">
+                      {mcpEnabled ? mcpToken : '••••••••••••••••••••••••••••••••'}
+                    </code>
+                    {mcpEnabled && (
+                      <>
+                        <button
+                          onClick={() => copyToClipboard(mcpToken, 'mcp-token')}
+                          className="p-2 text-gray-400 hover:text-violet-600 hover:bg-violet-50 rounded-lg transition-colors flex-shrink-0"
+                          title="Copy token"
+                        >
+                          {copied === 'mcp-token' ? <CheckCircle size={15} className="text-green-500" /> : <Copy size={15} />}
+                        </button>
+                        <button
+                          onClick={() => setMcpToken(generateKey())}
+                          className="p-2 text-gray-400 hover:text-orange-500 hover:bg-orange-50 rounded-lg transition-colors flex-shrink-0"
+                          title="Regenerate token"
+                        >
+                          <RefreshCw size={15} />
+                        </button>
+                      </>
+                    )}
+                  </div>
+                  {!mcpEnabled && <p className="text-xs text-gray-400 mt-1">Enable MCP access to reveal the token.</p>}
+                </div>
+
+                {/* Claude Desktop config example */}
+                {mcpEnabled && (
+                  <div>
+                    <div className="flex items-center justify-between mb-1.5">
+                      <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Claude Desktop Config</label>
+                      <button
+                        onClick={() => copyToClipboard(configSnippet, 'mcp-config')}
+                        className="flex items-center gap-1 text-xs text-gray-400 hover:text-violet-600 transition-colors"
+                      >
+                        {copied === 'mcp-config' ? <><CheckCircle size={12} className="text-green-500" /> Copied</> : <><Copy size={12} /> Copy</>}
+                      </button>
+                    </div>
+                    <pre className="bg-gray-900 text-violet-300 text-xs rounded-lg p-3 overflow-x-auto font-mono leading-relaxed whitespace-pre-wrap break-all">
+                      {configSnippet}
+                    </pre>
+                    <p className="text-xs text-gray-400 mt-1.5">Add this to your <code className="font-mono bg-gray-100 px-1 rounded">claude_desktop_config.json</code> to use this KB in Claude Desktop.</p>
+                  </div>
+                )}
+              </div>
+
+              <div className="px-5 py-4 border-t border-gray-100 flex justify-end">
+                <button onClick={() => setShowMcp(false)} className="px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-lg transition-colors">
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        )
+      })()}
 
       {/* API Modal */}
       {showApi && (() => {
