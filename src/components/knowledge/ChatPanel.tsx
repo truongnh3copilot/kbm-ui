@@ -143,7 +143,6 @@ export default function ChatPanel({ categoryId, categoryName }: Props) {
             <Send size={14} />
           </button>
         </div>
-        <p className="text-xs text-gray-400 mt-1.5 text-center">Responses are generated from documents in this category</p>
       </div>
     </div>
   )
