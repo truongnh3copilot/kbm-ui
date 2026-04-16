@@ -16,7 +16,6 @@ const navGroups = [
       { href: '/knowledge',       label: 'Store',          icon: Store },
       { href: '/access-control',  label: 'Access Request', icon: ShieldCheck },
       { href: '/users-groups',    label: 'Users & Groups', icon: Users },
-      { href: '/feedback',        label: 'Feedback',       icon: MessageSquare },
       { href: '/audit-log',       label: 'Audit Log',      icon: ScrollText },
     ],
   },

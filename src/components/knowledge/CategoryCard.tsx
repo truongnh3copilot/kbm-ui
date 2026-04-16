@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { MoreVertical, FileText, Clock, Edit2, User, Shield, Heart, ShieldCheck, X } from 'lucide-react'
+import { MoreVertical, FileText, Clock, Edit2, User, Shield, ShieldCheck, X } from 'lucide-react'
 import { useState, useRef, useEffect } from 'react'
 import { Category, userGroups, currentUser } from '@/data/mock'
 import clsx from 'clsx'
@@ -18,11 +18,6 @@ interface Props {
 
 export default function CategoryCard({ category, onEdit }: Props) {
   const [menuOpen, setMenuOpen] = useState(false)
-  const [liked, setLiked] = useState(false)
-  const [likeCount, setLikeCount] = useState(() => {
-    const seed = category.id.split('').reduce((acc, c) => acc + c.charCodeAt(0), 0)
-    return (seed * 7) % 20
-  })
   const [showAccessModal, setShowAccessModal] = useState(false)
   const [form, setForm] = useState({ groupId: '', levels: [] as ('view' | 'edit')[] })
   const [submitted, setSubmitted] = useState(false)
@@ -107,10 +102,10 @@ export default function CategoryCard({ category, onEdit }: Props) {
 
           <p className="text-xs text-gray-500 mt-1.5 line-clamp-2 flex-1">{category.description}</p>
 
-          {/* Created by */}
+          {/* Owner */}
           <div className="flex items-center gap-1.5 mt-3 text-xs text-gray-500">
             <User size={11} className="text-gray-400 flex-shrink-0" />
-            <span className="truncate">Created by <span className="font-medium text-gray-700">{category.createdBy}</span></span>
+            <span className="truncate">Owner <span className="font-medium text-purple-600">{category.createdBy}</span></span>
           </div>
 
           {/* Permission groups */}
@@ -137,13 +132,6 @@ export default function CategoryCard({ category, onEdit }: Props) {
                 <FileText size={11} />
                 <span>{category.documentCount} docs</span>
               </div>
-              <button
-                onClick={e => { e.preventDefault(); setLiked(v => !v); setLikeCount(c => liked ? c - 1 : c + 1) }}
-                className="flex items-center gap-1 text-xs transition-colors"
-              >
-                <Heart size={13} className={clsx('transition-colors', liked ? 'fill-red-500 text-red-500' : 'text-gray-400 hover:text-red-400')} />
-                <span className={clsx('font-medium', liked ? 'text-red-500' : 'text-gray-400')}>{likeCount}</span>
-              </button>
             </div>
             <div className="flex items-center gap-1.5 text-xs text-gray-400">
               <Clock size={11} />

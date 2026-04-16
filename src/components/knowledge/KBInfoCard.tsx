@@ -39,7 +39,7 @@ export default function KBInfoCard({ category, groups }: Props) {
               ? <ChevronUp size={15} className="text-gray-400" />
               : <ChevronDown size={15} className="text-gray-400" />
             }
-            <span className="text-sm font-semibold text-gray-800">{category.name}</span>
+            <span className="text-base font-semibold text-purple-600">{category.name}</span>
           </div>
           <div className="flex items-center gap-3" onClick={e => e.stopPropagation()}>
             <button
@@ -57,24 +57,17 @@ export default function KBInfoCard({ category, groups }: Props) {
             <p className="text-sm text-gray-500 mb-4">{category.description}</p>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm">
               <div className="flex items-start gap-2">
-                <User size={15} className="text-gray-400 mt-0.5 flex-shrink-0" />
-                <div>
-                  <p className="text-xs text-gray-400 mb-0.5">Created by</p>
-                  <p className="font-medium text-gray-700">{category.createdBy}</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-2">
-                <Clock size={15} className="text-gray-400 mt-0.5 flex-shrink-0" />
-                <div>
-                  <p className="text-xs text-gray-400 mb-0.5">Last updated</p>
-                  <p className="font-medium text-gray-700">{category.lastUpdated}</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-2">
                 <FileStack size={15} className="text-gray-400 mt-0.5 flex-shrink-0" />
                 <div>
                   <p className="text-xs text-gray-400 mb-0.5">Documents</p>
                   <p className="font-medium text-gray-700">{category.documentCount}</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-2">
+                <User size={15} className="text-gray-400 mt-0.5 flex-shrink-0" />
+                <div>
+                  <p className="text-xs text-gray-400 mb-0.5">Owner</p>
+                  <p className="font-medium text-gray-700">{category.createdBy}</p>
                 </div>
               </div>
               <div className="flex items-start gap-2">
@@ -92,6 +85,13 @@ export default function KBInfoCard({ category, groups }: Props) {
                       ))}
                     </div>
                   )}
+                </div>
+              </div>
+              <div className="flex items-start gap-2">
+                <Clock size={15} className="text-gray-400 mt-0.5 flex-shrink-0" />
+                <div>
+                  <p className="text-xs text-gray-400 mb-0.5">Last Updated</p>
+                  <p className="font-medium text-gray-700">{category.lastUpdated}</p>
                 </div>
               </div>
             </div>

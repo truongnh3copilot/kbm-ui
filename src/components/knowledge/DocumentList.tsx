@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef } from 'react'
-import { Upload, Trash2, Download, Search, FileText, Filter, AlertCircle, X, Link2, Loader2, CheckSquare, Square } from 'lucide-react'
+import { Upload, Trash2, Download, Search, FileText, AlertCircle, X, Link2, Loader2, CheckSquare, Square } from 'lucide-react'
 import { Document, documents as allDocs } from '@/data/mock'
 import clsx from 'clsx'
 
@@ -89,7 +89,6 @@ interface Props {
 export default function DocumentList({ categoryId }: Props) {
   const [docs, setDocs] = useState<Document[]>(allDocs.filter(d => d.categoryId === categoryId))
   const [search, setSearch] = useState('')
-  const [typeFilter, setTypeFilter] = useState<string>('All')
   const [uploadError, setUploadError] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -107,13 +106,9 @@ export default function DocumentList({ categoryId }: Props) {
   const [confluenceFiles, setConfluenceFiles] = useState<ConfluenceFile[]>([])
   const [selectedConfluence, setSelectedConfluence] = useState<Set<string>>(new Set())
 
-  const fileTypes = ['All', 'PDF', 'DOCX', 'TXT', 'XLSX', 'PPTX']
-
-  const filtered = docs.filter(d => {
-    const matchSearch = d.name.toLowerCase().includes(search.toLowerCase())
-    const matchType = typeFilter === 'All' || d.type === typeFilter
-    return matchSearch && matchType
-  })
+  const filtered = docs.filter(d =>
+    d.name.toLowerCase().includes(search.toLowerCase())
+  )
 
   function handleDelete(id: string) {
     setDocs(prev => prev.filter(d => d.id !== id))
@@ -258,25 +253,6 @@ export default function DocumentList({ categoryId }: Props) {
           <Upload size={14} />
           Upload
         </button>
-      </div>
-
-      {/* Type filter */}
-      <div className="flex items-center gap-2 mb-3 flex-wrap">
-        <Filter size={13} className="text-gray-400" />
-        {fileTypes.map(t => (
-          <button
-            key={t}
-            onClick={() => setTypeFilter(t)}
-            className={clsx(
-              'px-3 py-1 text-xs rounded-full border transition-colors',
-              typeFilter === t
-                ? 'bg-black text-white border-black'
-                : 'bg-white text-gray-600 border-gray-200 hover:border-gray-300'
-            )}
-          >
-            {t}
-          </button>
-        ))}
       </div>
 
       {/* Table */}
