@@ -290,7 +290,7 @@ export default function KBInfoCard({ category, groups, initialLikes = 0 }: Props
                   <button
                     onClick={handleSend}
                     disabled={!feedback.subject.trim() || !feedback.message.trim()}
-                    className="px-4 py-2 text-sm bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                    className="px-4 py-2 text-sm bg-black text-white font-medium rounded-lg hover:bg-gray-800 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                   >
                     Send
                   </button>

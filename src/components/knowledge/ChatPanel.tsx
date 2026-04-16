@@ -103,7 +103,7 @@ export default function ChatPanel({ categoryId, categoryName }: Props) {
                 'px-3.5 py-2.5 rounded-xl text-sm leading-relaxed',
                 msg.role === 'assistant'
                   ? 'bg-gray-100 text-gray-800 rounded-tl-none'
-                  : 'bg-blue-600 text-white rounded-tr-none'
+                  : 'bg-black text-white rounded-tr-none'
               )}>
                 {msg.content}
               </div>
@@ -138,7 +138,7 @@ export default function ChatPanel({ categoryId, categoryName }: Props) {
           <button
             onClick={send}
             disabled={!input.trim()}
-            className="p-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed flex-shrink-0"
+            className="p-1.5 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors disabled:opacity-40 disabled:cursor-not-allowed flex-shrink-0"
           >
             <Send size={14} />
           </button>

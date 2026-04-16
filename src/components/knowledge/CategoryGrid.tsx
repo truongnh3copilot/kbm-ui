@@ -1,19 +1,28 @@
 'use client'
 
 import { useState } from 'react'
-import { Plus, X } from 'lucide-react'
+import { Plus, X, Search } from 'lucide-react'
 import CategoryCard from './CategoryCard'
 import { Category, categories as initialCategories } from '@/data/mock'
 
-interface CategoryGridProps {
-  search?: string
-}
-
-export default function CategoryGrid({ search = '' }: CategoryGridProps) {
+export default function CategoryGrid() {
   const [categories, setCategories] = useState<Category[]>(initialCategories)
+  const [search, setSearch] = useState('')
   const [showModal, setShowModal] = useState(false)
   const [editing, setEditing] = useState<Category | null>(null)
-  const [form, setForm] = useState({ name: '', description: '' })
+  const [form, setForm] = useState({ name: '', description: '', embeddingModel: '' })
+
+  const embeddingModels = [
+    { value: 'text-embedding-3-small', label: 'OpenAI — text-embedding-3-small' },
+    { value: 'text-embedding-3-large', label: 'OpenAI — text-embedding-3-large' },
+    { value: 'text-embedding-ada-002', label: 'OpenAI — text-embedding-ada-002' },
+    { value: 'embed-english-v3.0', label: 'Cohere — embed-english-v3.0' },
+    { value: 'embed-multilingual-v3.0', label: 'Cohere — embed-multilingual-v3.0' },
+    { value: 'voyage-3', label: 'Voyage AI — voyage-3' },
+    { value: 'voyage-3-lite', label: 'Voyage AI — voyage-3-lite' },
+    { value: 'bge-m3', label: 'BAAI — bge-m3 (local)' },
+    { value: 'bge-large-en-v1.5', label: 'BAAI — bge-large-en-v1.5 (local)' },
+  ]
 
   const filteredCategories = categories
     .filter(c => c.name.toLowerCase().includes(search.toLowerCase()))
@@ -21,13 +30,13 @@ export default function CategoryGrid({ search = '' }: CategoryGridProps) {
 
   function openAdd() {
     setEditing(null)
-    setForm({ name: '', description: '' })
+    setForm({ name: '', description: '', embeddingModel: '' })
     setShowModal(true)
   }
 
   function openEdit(c: Category) {
     setEditing(c)
-    setForm({ name: c.name, description: c.description })
+    setForm({ name: c.name, description: c.description, embeddingModel: c.embeddingModel ?? '' })
     setShowModal(true)
   }
 
@@ -40,6 +49,7 @@ export default function CategoryGrid({ search = '' }: CategoryGridProps) {
         id: `c-${crypto.randomUUID()}`,
         name: form.name,
         description: form.description,
+        embeddingModel: form.embeddingModel || undefined,
         documentCount: 0,
         lastUpdated: new Date().toISOString().slice(0, 10),
         color: 'bg-blue-100 text-blue-700',
@@ -54,15 +64,26 @@ export default function CategoryGrid({ search = '' }: CategoryGridProps) {
   return (
     <div>
       {/* Toolbar */}
-      <div className="flex items-center justify-between mb-5">
-        <p className="text-sm text-gray-500">{filteredCategories.length} categories</p>
-        <button
-          onClick={openAdd}
-          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
-        >
-          <Plus size={15} />
-          Add Category
-        </button>
+      <div className="flex items-center justify-between mb-5 gap-3">
+        <p className="text-sm text-gray-500 flex-shrink-0">{filteredCategories.length} categories</p>
+        <div className="flex items-center gap-3 ml-auto">
+          <div className="relative">
+            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+            <input
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              placeholder="Search categories..."
+              className="pl-8 pr-3 py-2 text-sm border border-gray-200 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:bg-white w-56 transition-all"
+            />
+          </div>
+          <button
+            onClick={openAdd}
+            className="flex items-center gap-2 px-4 py-2 bg-black text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors flex-shrink-0"
+          >
+            <Plus size={15} />
+            Add Category
+          </button>
+        </div>
       </div>
 
       {/* Grid */}
@@ -106,12 +127,26 @@ export default function CategoryGrid({ search = '' }: CategoryGridProps) {
                   className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
                 />
               </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Embedding Model</label>
+                <select
+                  value={form.embeddingModel}
+                  onChange={e => setForm(f => ({ ...f, embeddingModel: e.target.value }))}
+                  disabled={!!editing}
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed"
+                >
+                  <option value="">— Select a model —</option>
+                  {embeddingModels.map(m => (
+                    <option key={m.value} value={m.value}>{m.label}</option>
+                  ))}
+                </select>
+              </div>
             </div>
             <div className="px-5 py-4 border-t border-gray-100 flex justify-end gap-3">
               <button onClick={() => setShowModal(false)} className="px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-lg transition-colors">
                 Cancel
               </button>
-              <button onClick={handleSubmit} className="px-4 py-2 text-sm bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors">
+              <button onClick={handleSubmit} className="px-4 py-2 text-sm bg-black text-white font-medium rounded-lg hover:bg-gray-800 transition-colors">
                 {editing ? 'Save Changes' : 'Create'}
               </button>
             </div>

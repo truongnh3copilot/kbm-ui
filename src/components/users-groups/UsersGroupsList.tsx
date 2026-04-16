@@ -216,7 +216,7 @@ function UsersTab({ groups }: { groups: UserGroup[] }) {
               <button
                 onClick={handleSubmit}
                 disabled={!form.name.trim() || !form.email.trim() || !form.role}
-                className="px-4 py-2 text-sm bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                className="px-4 py-2 text-sm bg-black text-white font-medium rounded-lg hover:bg-gray-800 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 {editing ? 'Save Changes' : 'Add User'}
               </button>
@@ -234,7 +234,7 @@ function UsersTab({ groups }: { groups: UserGroup[] }) {
             <p className="text-sm text-gray-400 mb-5">This action cannot be undone.</p>
             <div className="flex justify-center gap-3">
               <button onClick={() => setDeleteConfirm(null)} className="px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-lg transition-colors">Cancel</button>
-              <button onClick={() => handleDelete(deleteConfirm)} className="px-4 py-2 text-sm bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 transition-colors">Remove</button>
+              <button onClick={() => handleDelete(deleteConfirm)} className="px-4 py-2 text-sm bg-black text-white font-medium rounded-lg hover:bg-gray-800 transition-colors">Remove</button>
             </div>
           </div>
         </div>
@@ -308,7 +308,7 @@ function GroupsTab({ users }: { users: UserType[] }) {
         </div>
         <button
           onClick={openAdd}
-          className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors flex-shrink-0"
+          className="flex items-center gap-2 px-4 py-2 text-sm bg-black text-white font-medium rounded-lg hover:bg-gray-800 transition-colors flex-shrink-0"
         >
           <Plus size={14} /> Add Group
         </button>
@@ -419,7 +419,7 @@ function GroupsTab({ users }: { users: UserType[] }) {
               <button
                 onClick={handleSubmit}
                 disabled={!form.name.trim()}
-                className="px-4 py-2 text-sm bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                className="px-4 py-2 text-sm bg-black text-white font-medium rounded-lg hover:bg-gray-800 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 {editing ? 'Save Changes' : 'Add Group'}
               </button>
@@ -437,7 +437,7 @@ function GroupsTab({ users }: { users: UserType[] }) {
             <p className="text-sm text-gray-400 mb-5">Members will be unassigned from this group.</p>
             <div className="flex justify-center gap-3">
               <button onClick={() => setDeleteConfirm(null)} className="px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-lg transition-colors">Cancel</button>
-              <button onClick={() => handleDelete(deleteConfirm)} className="px-4 py-2 text-sm bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 transition-colors">Delete</button>
+              <button onClick={() => handleDelete(deleteConfirm)} className="px-4 py-2 text-sm bg-black text-white font-medium rounded-lg hover:bg-gray-800 transition-colors">Delete</button>
             </div>
           </div>
         </div>
@@ -460,13 +460,13 @@ export default function UsersGroupsList() {
           className={clsx(
             'flex items-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 transition-colors',
             tab === 'users'
-              ? 'border-blue-600 text-blue-600'
+              ? 'bg-blue-100 text-purple-700 border-purple-400'
               : 'border-transparent text-gray-500 hover:text-gray-700'
           )}
         >
           <User size={15} />
           Users
-          <span className={clsx('px-1.5 py-0.5 text-xs rounded-full font-semibold', tab === 'users' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-500')}>
+          <span className={clsx('px-1.5 py-0.5 text-xs rounded-full font-semibold', tab === 'users' ? 'bg-purple-100 text-purple-700' : 'bg-gray-100 text-gray-500')}>
             {initialUsers.length}
           </span>
         </button>
@@ -475,13 +475,13 @@ export default function UsersGroupsList() {
           className={clsx(
             'flex items-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 transition-colors',
             tab === 'groups'
-              ? 'border-blue-600 text-blue-600'
+              ? 'bg-blue-100 text-purple-700 border-purple-400'
               : 'border-transparent text-gray-500 hover:text-gray-700'
           )}
         >
           <Users size={15} />
           Groups
-          <span className={clsx('px-1.5 py-0.5 text-xs rounded-full font-semibold', tab === 'groups' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-500')}>
+          <span className={clsx('px-1.5 py-0.5 text-xs rounded-full font-semibold', tab === 'groups' ? 'bg-purple-100 text-purple-700' : 'bg-gray-100 text-gray-500')}>
             {initialGroups.length}
           </span>
         </button>

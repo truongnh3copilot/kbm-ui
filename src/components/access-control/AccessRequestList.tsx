@@ -132,14 +132,14 @@ export default function AccessRequestList() {
             onClick={() => { setTab('mine'); setStatusFilter('all') }}
             className={clsx(
               'flex items-center gap-2 px-4 py-2 text-sm font-medium transition-colors',
-              tab === 'mine' ? 'bg-blue-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-50'
+              tab === 'mine' ? 'bg-blue-100 text-purple-700' : 'bg-white text-gray-600 hover:bg-gray-50'
             )}
           >
             <User size={14} />
             My Requests
             <span className={clsx(
               'px-1.5 py-0.5 rounded-full text-xs font-semibold',
-              tab === 'mine' ? 'bg-white text-blue-600' : 'bg-gray-100 text-gray-600'
+              tab === 'mine' ? 'bg-purple-100 text-purple-700' : 'bg-gray-100 text-gray-600'
             )}>
               {myRequests.length}
             </span>
@@ -148,7 +148,7 @@ export default function AccessRequestList() {
             onClick={() => { setTab('approval'); setStatusFilter('all') }}
             className={clsx(
               'flex items-center gap-2 px-4 py-2 text-sm font-medium transition-colors border-l border-gray-200',
-              tab === 'approval' ? 'bg-blue-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-50'
+              tab === 'approval' ? 'bg-blue-100 text-purple-700' : 'bg-white text-gray-600 hover:bg-gray-50'
             )}
           >
             <Bell size={14} />
@@ -156,7 +156,7 @@ export default function AccessRequestList() {
             {pendingApprovalCount > 0 && (
               <span className={clsx(
                 'px-1.5 py-0.5 rounded-full text-xs font-semibold',
-                tab === 'approval' ? 'bg-white text-blue-600' : 'bg-red-500 text-white'
+                tab === 'approval' ? 'bg-purple-100 text-purple-700' : 'bg-red-500 text-white'
               )}>
                 {pendingApprovalCount}
               </span>
@@ -165,7 +165,7 @@ export default function AccessRequestList() {
         </div>
         <button
           onClick={() => setShowAddModal(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
+          className="flex items-center gap-2 px-4 py-2 bg-black text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors"
         >
           <Plus size={15} /> Add Permission
         </button>
@@ -376,7 +376,7 @@ export default function AccessRequestList() {
             </div>
             <div className="px-5 py-4 border-t border-gray-100 flex justify-end gap-3">
               <button onClick={() => setShowAddModal(false)} className="px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-lg transition-colors">Cancel</button>
-              <button onClick={handleSubmit} className="px-4 py-2 text-sm bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors">Submit</button>
+              <button onClick={handleSubmit} className="px-4 py-2 text-sm bg-black text-white font-medium rounded-lg hover:bg-gray-800 transition-colors">Submit</button>
             </div>
           </div>
         </div>

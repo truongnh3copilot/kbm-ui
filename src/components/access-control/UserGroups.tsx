@@ -42,7 +42,7 @@ export default function UserGroups() {
         <h3 className="text-sm font-semibold text-gray-700">User Groups</h3>
         <button
           onClick={openAdd}
-          className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 text-white text-xs font-medium rounded-lg hover:bg-blue-700 transition-colors"
+          className="flex items-center gap-1.5 px-3 py-1.5 bg-black text-white text-xs font-medium rounded-lg hover:bg-gray-800 transition-colors"
         >
           <Plus size={13} /> Add Group
         </button>
@@ -89,7 +89,7 @@ export default function UserGroups() {
             </div>
             <div className="px-5 py-4 border-t border-gray-100 flex justify-end gap-3">
               <button onClick={() => setShowModal(false)} className="px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-lg">Cancel</button>
-              <button onClick={handleSubmit} className="px-4 py-2 text-sm bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700">{editing ? 'Save' : 'Create'}</button>
+              <button onClick={handleSubmit} className="px-4 py-2 text-sm bg-black text-white font-medium rounded-lg hover:bg-gray-800">{editing ? 'Save' : 'Create'}</button>
             </div>
           </div>
         </div>

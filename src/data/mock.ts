@@ -7,6 +7,7 @@ export interface Category {
   color: string
   createdBy: string
   permissionGroups: string[]  // group ids with non-none access
+  embeddingModel?: string
 }
 
 export interface Document {
@@ -92,12 +93,12 @@ export interface Activity {
 
 // --- Categories ---
 export const categories: Category[] = [
-  { id: 'c1', name: 'Product Documentation', description: 'Technical specs, user guides, and release notes for all products.', documentCount: 24, lastUpdated: '2026-04-14', color: 'bg-blue-100 text-blue-700', createdBy: 'Nguyễn Thị Lan', permissionGroups: ['g1', 'g2', 'g3', 'g4'] },
-  { id: 'c2', name: 'HR Policies', description: 'Company policies, onboarding materials, and employee handbook.', documentCount: 18, lastUpdated: '2026-04-10', color: 'bg-green-100 text-green-700', createdBy: 'Phòng Nhân Sự', permissionGroups: ['g1', 'g2', 'g4', 'g5'] },
-  { id: 'c3', name: 'Engineering Wiki', description: 'Architecture decisions, coding standards, and runbooks.', documentCount: 41, lastUpdated: '2026-04-13', color: 'bg-purple-100 text-purple-700', createdBy: 'Lê Thị Mai', permissionGroups: ['g1', 'g2'] },
-  { id: 'c4', name: 'Sales Playbook', description: 'Sales scripts, case studies, and competitive analysis.', documentCount: 12, lastUpdated: '2026-04-08', color: 'bg-orange-100 text-orange-700', createdBy: 'Hoàng Thị Thu', permissionGroups: ['g2', 'g3'] },
-  { id: 'c5', name: 'Legal & Compliance', description: 'Contracts, regulatory filings, and compliance checklists.', documentCount: 9, lastUpdated: '2026-04-05', color: 'bg-red-100 text-red-700', createdBy: 'Phạm Văn Đức', permissionGroups: ['g1', 'g4', 'g5'] },
-  { id: 'c6', name: 'Marketing Assets', description: 'Brand guidelines, campaign materials, and media kits.', documentCount: 33, lastUpdated: '2026-04-12', color: 'bg-yellow-100 text-yellow-700', createdBy: 'Hoàng Thị Thu', permissionGroups: ['g2', 'g3', 'g1'] },
+  { id: 'c1', name: 'Product Documentation', description: 'Technical specs, user guides, and release notes for all products.', documentCount: 24, lastUpdated: '2026-04-14', color: 'bg-blue-100 text-blue-700', createdBy: 'Nguyễn Thị Lan', permissionGroups: ['g1', 'g2', 'g3', 'g4'], embeddingModel: 'text-embedding-3-large' },
+  { id: 'c2', name: 'HR Policies', description: 'Company policies, onboarding materials, and employee handbook.', documentCount: 18, lastUpdated: '2026-04-10', color: 'bg-green-100 text-green-700', createdBy: 'Phòng Nhân Sự', permissionGroups: ['g1', 'g2', 'g4', 'g5'], embeddingModel: 'embed-multilingual-v3.0' },
+  { id: 'c3', name: 'Engineering Wiki', description: 'Architecture decisions, coding standards, and runbooks.', documentCount: 41, lastUpdated: '2026-04-13', color: 'bg-purple-100 text-purple-700', createdBy: 'Lê Thị Mai', permissionGroups: ['g1', 'g2'], embeddingModel: 'bge-m3' },
+  { id: 'c4', name: 'Sales Playbook', description: 'Sales scripts, case studies, and competitive analysis.', documentCount: 12, lastUpdated: '2026-04-08', color: 'bg-orange-100 text-orange-700', createdBy: 'Hoàng Thị Thu', permissionGroups: ['g2', 'g3'], embeddingModel: 'voyage-3' },
+  { id: 'c5', name: 'Legal & Compliance', description: 'Contracts, regulatory filings, and compliance checklists.', documentCount: 9, lastUpdated: '2026-04-05', color: 'bg-red-100 text-red-700', createdBy: 'Phạm Văn Đức', permissionGroups: ['g1', 'g4', 'g5'], embeddingModel: 'text-embedding-3-small' },
+  { id: 'c6', name: 'Marketing Assets', description: 'Brand guidelines, campaign materials, and media kits.', documentCount: 33, lastUpdated: '2026-04-12', color: 'bg-yellow-100 text-yellow-700', createdBy: 'Hoàng Thị Thu', permissionGroups: ['g2', 'g3', 'g1'], embeddingModel: 'voyage-3-lite' },
 ]
 
 // --- Documents ---

@@ -7,14 +7,15 @@ interface MainLayoutProps {
   searchAutoFocus?: boolean
   search?: string
   onSearchChange?: (value: string) => void
+  hideSearch?: boolean
 }
 
-export default function MainLayout({ children, title, searchAutoFocus, search, onSearchChange }: MainLayoutProps) {
+export default function MainLayout({ children, title, searchAutoFocus, search, onSearchChange, hideSearch }: MainLayoutProps) {
   return (
     <div className="flex min-h-screen bg-gray-50">
       <Sidebar />
       <div className="flex-1 flex flex-col min-w-0">
-        <Header title={title} searchAutoFocus={searchAutoFocus} search={search} onSearchChange={onSearchChange} />
+        <Header title={title} searchAutoFocus={searchAutoFocus} search={search} onSearchChange={onSearchChange} hideSearch={hideSearch} />
         <main className="flex-1 p-6 overflow-auto">
           {children}
         </main>

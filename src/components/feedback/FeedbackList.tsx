@@ -301,7 +301,7 @@ export default function FeedbackList() {
             <p className="text-sm text-gray-400 mb-5">This action cannot be undone.</p>
             <div className="flex justify-center gap-3">
               <button onClick={() => setDeleteConfirm(null)} className="px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-lg transition-colors">Cancel</button>
-              <button onClick={() => handleDelete(deleteConfirm)} className="px-4 py-2 text-sm bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 transition-colors">Delete</button>
+              <button onClick={() => handleDelete(deleteConfirm)} className="px-4 py-2 text-sm bg-black text-white font-medium rounded-lg hover:bg-gray-800 transition-colors">Delete</button>
             </div>
           </div>
         </div>

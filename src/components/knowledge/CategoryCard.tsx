@@ -66,7 +66,7 @@ export default function CategoryCard({ category, onEdit }: Props) {
 
   return (
     <>
-      <div className="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow group relative flex flex-col">
+      <div className="bg-white rounded-xl border border-gray-200 shadow-sm hover:scale-105 hover:shadow-[0_12px_40px_rgba(0,0,0,0.12)] hover:border-l-4 hover:border-l-purple-500 hover:border-r-2 hover:border-r-gray-300 transition-all duration-300 ease-out group relative flex flex-col">
         {/* Top color strip */}
         <div className={clsx('h-1.5 rounded-t-xl', category.color.split(' ')[0])} />
 
@@ -74,7 +74,7 @@ export default function CategoryCard({ category, onEdit }: Props) {
           {/* Title row */}
           <div className="flex items-start justify-between gap-2">
             <Link href={`/knowledge/${category.id}`} className="flex-1 min-w-0">
-              <h3 className="font-semibold text-gray-800 text-sm group-hover:text-blue-600 transition-colors line-clamp-1">
+              <h3 className="font-semibold text-gray-800 text-lg group-hover:text-purple-700 transition-colors line-clamp-1">
                 {category.name}
               </h3>
             </Link>
@@ -230,7 +230,7 @@ export default function CategoryCard({ category, onEdit }: Props) {
                   <button
                     onClick={handleSubmit}
                     disabled={!form.groupId || form.levels.length === 0}
-                    className="px-4 py-2 text-sm bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                    className="px-4 py-2 text-sm bg-black text-white font-medium rounded-lg hover:bg-gray-800 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                   >
                     Submit
                   </button>
